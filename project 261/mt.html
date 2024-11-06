@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>อัปโหลดไฟล์ PDF และ JPG</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>อัปโหลดไฟล์ PDF หรือ JPG</h2>
+    <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg" multiple>
+    <p id="fileError" class="error"></p>
+
+    <script>
+        // การตรวจสอบขนาดไฟล์และจำนวนไฟล์
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const files = event.target.files;
+            const errorElement = document.getElementById('fileError');
+            errorElement.textContent = ''; // ลบข้อความผิดพลาดเก่า
+
+            if (files.length > 5) {
+                errorElement.textContent = 'จำนวนไฟล์ไม่สามารถเกิน 5 ไฟล์';
+                event.target.value = ''; // ล้างการเลือกไฟล์
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const fileSizeKB = file.size / 1024; // ขนาดไฟล์เป็น KB
+
+                // ตรวจสอบประเภทไฟล์
+                if (!file.type.match('application/pdf') && !file.type.match('image/jpeg')) {
+                    errorElement.textContent = 'โปรดเลือกไฟล์ PDF หรือ JPG เท่านั้น';
+                    event.target.value = ''; // ล้างการเลือกไฟล์
+                    return;
+                }
+
+                // ตรวจสอบขนาดไฟล์
+                if (fileSizeKB > 100) {
+                    errorElement.textContent = 'ขนาดไฟล์ไม่สามารถเกิน 100 KB';
+                    event.target.value = ''; // ล้างการเลือกไฟล์
+                    return;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
